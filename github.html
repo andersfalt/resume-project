@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rosie Odenkirk</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css" type="text/css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        type="text/css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css"
+        type="text/css" />
     <link rel="stylesheet" href="assets/css/github-styles.css" type="text/css">
     <link rel="stylesheet" href="assets/css/style.css" type="text/css" />
 
@@ -32,22 +35,28 @@
                 <div class="row">
                     <ul id="nav" class="list-inline clearfix">
                         <li class="col-xs-6 col-sm-2 ui-menu-color-home menuitem">
-                            <a href="index.html" class="hvr-sweep-to-bottom"><i class="fa fa-home" aria-hidden="true"></i><span>Home</span></a>
+                            <a href="index.html" class="hvr-sweep-to-bottom"><i class="fa fa-home"
+                                    aria-hidden="true"></i><span>Home</span></a>
                         </li>
                         <li class="col-xs-6 col-sm-2 ui-menu-color-resume menuitem">
-                            <a href="resume.html" class="hvr-sweep-to-bottom"><i class="fa fa-graduation-cap" aria-hidden="true"></i><span>Resume</span></a>
+                            <a href="resume.html" class="hvr-sweep-to-bottom"><i class="fa fa-graduation-cap"
+                                    aria-hidden="true"></i><span>Resume</span></a>
                         </li>
                         <li class="col-xs-6 col-sm-2 ui-menu-color-contact menuitem">
-                            <a href="contact.html" class="hvr-sweep-to-bottom"><i class=" fa fa-commenting-o" aria-hidden="true"></i><span>Contact</span></a>
+                            <a href="contact.html" class="hvr-sweep-to-bottom"><i class=" fa fa-commenting-o"
+                                    aria-hidden="true"></i><span>Contact</span></a>
                         </li>
                         <li class="col-xs-6 col-sm-2 ui-menu-color-interests menuitem">
-                            <a href="interests.html" class="hvr-sweep-to-bottom"><i class="fa fa-users" aria-hidden="true"></i><span>Interests</span></a>
+                            <a href="interests.html" class="hvr-sweep-to-bottom"><i class="fa fa-users"
+                                    aria-hidden="true"></i><span>Interests</span></a>
                         </li>
                         <li class="col-xs-6 col-sm-2 ui-menu-color-github menuitem">
-                            <a href="github.html" class="hvr-sweep-to-bottom"><i class="fa fa-github" aria-hidden="true"></i><span>GitHub</span></a>
+                            <a href="github.html" class="hvr-sweep-to-bottom"><i class="fa fa-github"
+                                    aria-hidden="true"></i><span>GitHub</span></a>
                         </li>
                         <li class="col-xs-6 col-sm-2 ui-menu-color-download menuitem">
-                            <a href="assets/cv/sample-cv.pdf" target="_blank" class="hvr-sweep-to-bottom"><i class="fa fa-download" aria-hidden="true"></i><span>Download CV</span></a>
+                            <a href="assets/cv/sample-cv.pdf" target="_blank" class="hvr-sweep-to-bottom"><i
+                                    class="fa fa-download" aria-hidden="true"></i><span>Download CV</span></a>
                         </li>
                     </ul>
                 </div>
@@ -73,14 +82,16 @@
             <div class="col-sm-4">
                 <h5 class="uppercase general-sub">About</h5>
                 <p class="inline-block">
-                    Full Stack Web Developer. Skilled in everything from HTML to Heroku. The capacity for structural and design thinking.
+                    Full Stack Web Developer. Skilled in everything from HTML to Heroku. The capacity for structural and
+                    design thinking.
                 </p>
             </div>
             <div class="col-sm-4">
                 <h5 class="uppercase general-sub">Download My CV</h5>
                 <p class="inline-block">
                     Need a printable version of my CV? Download it here.
-                    <a href="assets/cv/sample-cv.pdf" target="_blank" class="cv-pdf"><i class="fa fa-download" aria-hidden="true"></i></a>
+                    <a href="assets/cv/sample-cv.pdf" target="_blank" class="cv-pdf"><i class="fa fa-download"
+                            aria-hidden="true"></i></a>
                 </p>
             </div>
             <div class="col-sm-4">
@@ -96,6 +107,57 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function userInformationHTML(user) {
+            return `
+        <h2>${user.name}
+            <span class="small-name">
+                (@<a href="${user.html_url}" target="_blank">${user.login}</a>)
+            </span>
+        </h2>
+        <div class="gh-content">
+            <div class="gh-avatar">
+                <a href="${user.html_url}" target="_blank">
+                    <img src="${user.avatar_url}" width="80" height="80" alt="${user.login}" />
+                </a>
+            </div>
+            <p>Followers: ${user.followers} - Following ${user.following} <br> Repos: ${user.public_repos}</p>
+        </div>`;
+        }
+
+        function fetchGitHubInformation(event) {
+
+            var username = $("#gh-username").val();
+            if (!username) {
+                $("#gh-user-data").html(`<h2>Please enter a GitHub username</h2>`);
+                return;
+            }
+
+            $("#gh-user-data").html(
+                `<div id="loader">
+            <img src="assets/css/loader.gif" alt="loading..." />
+        </div>`);
+
+            $.when(
+                $.getJSON(`https://api.github.com/users/${username}`)
+            ).then(
+                function (response) {
+                    var userData = response;
+                    $("#gh-user-data").html(userInformationHTML(userData));
+                },
+                function (errorResponse) {
+                    if (errorResponse.status === 404) {
+                        $("#gh-user-data").html(
+                            `<h2>No info found for user ${username}</h2>`);
+                    } else {
+                        console.log(errorResponse);
+                        $("#gh-user-data").html(
+                            `<h2>Error: ${errorResponse.responseJSON.message}</h2>`);
+                    }
+                });
+        }
+    </script>
 </body>
 
 </html>
